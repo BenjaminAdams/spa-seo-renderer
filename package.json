@@ -1,0 +1,24 @@
+{
+  "name": "spa-seo-renderer",
+  "version": "0.6.1",
+  "description": "Use Phantomjs to render the content of redditJS",
+  "main": "./index",
+  "engines": {
+    "node": "5.1.x",
+    "npm": "3.3.x"
+  },
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "express": "^4.0.0",
+    "phantom": "^0.8.4",
+    "request": "^2.39.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BenjaminAdams/spa-seo-renderer.git"
+  },
+  "author": "BenjaminCraigAdams",
+  "license": "APACHE",
+  "homepage": "https://github.com/seethroughtrees/casperjs-spider"
+}
