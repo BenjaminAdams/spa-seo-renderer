@@ -1,4 +1,5 @@
-var phantom = require('phantom');
+var fs = require('fs')
+var phantom = require('phantom')
 var express = require("express")
 var http = require("http")
 var port = process.env.PORT || 8005
@@ -9,9 +10,11 @@ var config = require('./config')
 app.use(SetAccessControl);
 app.enable('trust proxy');
 
-app.get('/*', checkIfStaticFile, function(req, res) {
+app.get('/*', checkIfStaticFile, checkCache, function(req, res) {
   getSource(req.path, function(data) {
+
     res.status(200).send(data);
+
   })
 });
 
@@ -21,11 +24,11 @@ http.createServer(app).listen(port);
 //console.log('got data', data)
 //})
 
-function getSource(url, cb) {
-  url = url.replace('//', '/')
-  url = rtrim(url, '/')
+function getSource(urlPath, cb) {
+  urlPath = urlPath.replace('//', '/')
+  urlPath = rtrim(urlPath, '/')
 
-  var fullUrl = config.rootUrl + url
+  var fullUrl = config.rootUrl + urlPath
 
   phantom.create("--web-security=false", "--ignore-ssl-errors=true", "--load-images=false", '--ssl-protocol=any', '--disk-cache=true', function(ph) {
     ph.createPage(function(page) {
@@ -38,27 +41,76 @@ function getSource(url, cb) {
 
       page.open(fullUrl, function(status) {
         if (status === 'fail') {
-          cb('failed to load url:' + url)
+          cb('failed to load urlPath:' + urlPath)
           ph.exit();
         } else {
           setTimeout(function() {
             page.evaluate(function() {
               return document.all[0].innerHTML;
             }, function(data) {
-
               ph.exit();
-              return cb(data)
+              saveCache(urlPath, data, function() {
+                return cb(data)
+              })
             });
           }, config.timeout);
         }
       });
     });
-
   });
+}
+
+function saveCache(urlPath, data, cb) {
+  if (config.useCache !== true) return
+
+  try {
+    fs.writeFile(GetCacheFileName(urlPath), data, function(err) {
+      if (err) console.log(err);
+      console.log('just saved', urlPath);
+      cb()
+    });
+  } catch (e) {
+    next(false)
+  }
+
+}
+
+function checkCache(req, res, next) {
+  if (config.useCache !== true) return
+
+  try {
+
+    fs.stat(GetCacheFileName(req.path), function(err, stats) {
+      if (err || !stats) return next(false)
+      if (Date.now() + config.cacheExpiry > (new Date(stats.mtime).getTime())) {
+        return next(false) //cache is expired, go fetch a new one
+      }
+
+      fs.readFile(GetCacheFileName(req.path), function(err, data) {
+        if (err || !data) return next(false)
+          //console.log('found file in cache!', data, err)
+        res.status(200).send(data);
+      });
+
+    })
+
+  } catch (e) {
+    next(false)
+  }
+
+}
+
+function GetCacheFileName(urlPath) {
+  return config.cacheDirectory + '/' + urlPath.replace(/[^a-z0-9]/gi, '_')
 }
 
 function rtrim(str, chr) {
   var rgxtrim = (!chr) ? new RegExp('\\s+$') : new RegExp(chr + '+$');
+  return str.replace(rgxtrim, '');
+}
+
+function ltrim(str, chr) {
+  var rgxtrim = (!chr) ? new RegExp('^\\s+') : new RegExp('^' + chr + '+');
   return str.replace(rgxtrim, '');
 }
 
