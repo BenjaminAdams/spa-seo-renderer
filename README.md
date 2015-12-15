@@ -5,7 +5,7 @@ Search engine bots are notoriously bad at crawling single page apps.  Search eng
 
 ####Setup instructions
 These instructions will guide you through setting this up for free on [Heroku](https://heroku.com)
-* Create a new Heroku App.  If you've never set one up before read [this](https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction). I just created one at https://seo-renderer-example.herokuapp.com
+* Create a new Heroku App.  If you've never set one up before read [this](https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction). I just created one at [https://seo-renderer.herokuapp.com](https://seo-renderer.herokuapp.com)
 * Add [heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi) buildpack to heroku project
 * Modify config.js file to your needs
 * Modify your existing application to redirect search engine bots to this app.  If your website is built with nodejs you can use the [express-device](https://github.com/rguerreiro/express-device) npm module.
@@ -16,7 +16,7 @@ NodeJS SPA example
 ```js
 app.get("*", function(req, res) {
   if (req.device.type === 'bot') {
-      request.get('https://seo-renderer-example.herokuapp.com/' + req.path, function(error, response, body) {
+      request.get('https://seo-renderer.herokuapp.com' + req.path, function(error, response, body) {
         res.send(200, body)
       });
   } else {
@@ -30,7 +30,7 @@ php SPA example
 //at the top of your php file
 if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])) {
     $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    echo file_get_contents('https://seo-renderer-example.herokuapp.com/' +$path);
+    echo file_get_contents('https://seo-renderer.herokuapp.com' +$path);
     exit;
   }
 ```
@@ -52,7 +52,7 @@ public class ExampleApp: ApiController {
 
       public string FetchFromBot(string urlPath) {
         WebClient client = new WebClient();
-        Stream data = client.OpenRead("https://seo-renderer-example.herokuapp.com/"+ urlPath);
+        Stream data = client.OpenRead("https://seo-renderer.herokuapp.com"+ urlPath);
         StreamReader reader = new StreamReader(data);
         var pageContent = reader.ReadToEnd();
         data.Close();
@@ -62,3 +62,4 @@ public class ExampleApp: ApiController {
 
     }
 ```
+You can see it running in [https://seo-renderer.herokuapp.com](https://seo-renderer.herokuapp.com) do Right click -> View source and you can see the ajax content is loaded into the HTML for search engine goodness
