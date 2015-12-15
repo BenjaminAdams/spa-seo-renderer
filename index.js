@@ -82,13 +82,14 @@ function checkCache(req, res, next) {
 
     fs.stat(GetCacheFileName(req.path), function(err, stats) {
       if (err || !stats) return next(false)
-      if (Date.now() + config.cacheExpiry > (new Date(stats.mtime).getTime())) {
+      if (Date.now() + config.cacheExpiry < (new Date(stats.mtime).getTime())) {
+        console.log('cache is expired')
         return next(false) //cache is expired, go fetch a new one
       }
 
       fs.readFile(GetCacheFileName(req.path), function(err, data) {
         if (err || !data) return next(false)
-          //console.log('found file in cache!', data, err)
+        res.header('Content-Type', 'text/html; charset=utf-8')
         res.status(200).send(data);
       });
 
