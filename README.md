@@ -6,7 +6,7 @@ Search engine bots are notoriously bad at crawling single page apps.  Search eng
 ####Setup instructions
 These instructions will guide you through setting this up for free on [Heroku](https://heroku.com)
 * Create a new Heroku App.  If you've never set one up before read [this](https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction). I just created one at [https://seo-renderer.herokuapp.com](https://seo-renderer.herokuapp.com)
-* Add [heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi) buildpack to heroku project
+* Add [heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi) buildpack to heroku project.  Just run `heroku buildpacks:set https://github.com/ddollar/heroku-buildpack-multi.git`
 * Modify config.js file to your needs
 * Modify your existing application to redirect search engine bots to this app.  If your website is built with nodejs you can use the [express-device](https://github.com/rguerreiro/express-device) npm module.
 
