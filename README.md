@@ -3,16 +3,22 @@ Allows search engines to crawl and index your single page app!
 
 Search engine bots are notoriously bad at crawling single page apps.  Search engines will normally not let the AJAX requests finish before indexing your pages content.  This will pre-render the page for them, allowing your SPA to be crawled properly.
 
+Dependencies: 
+* Uses [PhantomJS](http://phantomjs.org/) to render the page.
+* Built using [NodeJs](https://nodejs.org), but you can use spa-seo-renderer to cache/render a website in any language.  Example code with other languages below.
+* Recommended to host this on [Heroku](https://heroku.com) for free as your external cache source.
+
 ####Setup instructions
 These instructions will guide you through setting this up for free on [Heroku](https://heroku.com)
 * Create a new Heroku App.  If you've never set one up before read [this](https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction). I just created one at [https://seo-renderer.herokuapp.com](https://seo-renderer.herokuapp.com)
-* From the CLI run run `heroku buildpacks:set https://github.com/ddollar/heroku-buildpack-multi.git` to add [heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi) buildpack to heroku project.
+* From the CLI run `heroku buildpacks:set https://github.com/ddollar/heroku-buildpack-multi.git` to add [heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi) buildpack to heroku project.
 * Modify config.js file to your needs
-* Modify your existing application to redirect search engine bots to this app.  If your website is built with nodejs you can use the [express-device](https://github.com/rguerreiro/express-device) npm module.
+* Modify your existing application to redirect search engine bots to this app.
 
-example code to redirect when a search engine bot is making the request.  You would modify your existing website to detect if its a search engine
+Example code to redirect when a search engine bot is making the request.  You would modify your existing website to detect if its a search engine.
 
-NodeJS SPA example
+NodeJS SPA example:
+If your website is built with nodejs you can use the [express-device](https://github.com/rguerreiro/express-device) npm module.
 ```js
 app.get("*", function(req, res) {
   if (req.device.type === 'bot') {
@@ -25,7 +31,7 @@ app.get("*", function(req, res) {
 })
 ```
 
-php SPA example
+Php SPA example:
 ```php
 //at the top of your php file
 if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])) {
@@ -35,7 +41,7 @@ if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/bot|crawl|slurp|spider/i'
   }
 ```
 
-c# SPA example
+c# SPA example:
 ```c#
 public class ExampleApp: ApiController {
       [HttpGet]
