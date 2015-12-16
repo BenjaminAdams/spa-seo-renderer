@@ -3,7 +3,7 @@ Allows search engines to crawl and index your single page app!
 
 Search engine bots are notoriously bad at crawling single page apps.  Search engines will normally not let the AJAX requests finish before indexing your pages content.  This will pre-render the page for them, allowing your SPA to be crawled properly.
 
-Dependencies: 
+####Dependencies: 
 * Uses [PhantomJS](http://phantomjs.org/) to render the page.
 * Built using [NodeJs](https://nodejs.org), but you can use spa-seo-renderer to cache/render a website in any language.  Example code with other languages below.
 * Recommended to host this on [Heroku](https://heroku.com) for free as your external cache source.
