@@ -70,4 +70,8 @@ public class ExampleApp: ApiController {
 ```
 You can see it running in [https://seo-renderer.herokuapp.com/r/funny](https://seo-renderer.herokuapp.com/r/funny) do Right click -> View source and you can see the ajax content is loaded into the HTML for search engine goodness
 
+Real world example.  I used this in my other project [redditJS.com](https://redditjs.com) and these were the results from google analytics.
+![redditjs google analytics](http://i.imgur.com/gDZaylE.png)
+
+
 "Precomposing" a SPA really works!
