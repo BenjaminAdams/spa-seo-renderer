@@ -31,7 +31,7 @@ app.get("*", function(req, res) {
 })
 ```
 
-Php SPA example:
+PHP SPA example:
 ```php
 //at the top of your php file
 if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])) {
