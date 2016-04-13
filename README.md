@@ -17,7 +17,7 @@ These instructions will guide you through setting this up for free on [Heroku](h
 
 Example code to redirect when a search engine bot is making the request.  You would modify your existing website to detect if its a search engine.
 
-NodeJS SPA example:
+NodeJS/Express SPA example:
 If your website is built with nodejs you can use the [express-device](https://github.com/rguerreiro/express-device) npm module.
 ```js
 app.get("*", function(req, res) {
